@@ -1,0 +1,6 @@
+{
+"Header" : { "jwf.action.html.header" },
+"body" :{"Content" : "jwf.action.content", "Current" : "0"}
+ "Footer" : "jwf.action.footer"
+ 
+}
