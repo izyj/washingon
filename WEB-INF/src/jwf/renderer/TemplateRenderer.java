@@ -3,7 +3,14 @@ package jwf.renderer;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
 
+import jwf.context.Context;
+
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -17,67 +24,93 @@ public class TemplateRenderer implements IRenderer {
 	public 	String[] headfields = {"header","footer","current"};
 	public 	String[] midfields = {"Content"};
 	public String[] f;
+	VelocityContext contextVel;
+	
 	public TemplateRenderer() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public String render(IContext context) {
 		
-		return null;
+		f = organize(context);		
+		return "";
 	}
 	
-	public void parseJson(IContext context) throws IOException{
-		PrintWriter out = context._getResponse().getWriter();
+	public void prioriteAffichage(IContext context) {
+		
 		
 		// test parse	
-			JsonFactory f = new JsonFactory();
-		    JsonParser jp;
-			try {
-				jp = f.createJsonParser(new File("D:\\jsontest\\user.json"));
-				 //  User user = new User();
-			    jp.nextToken(); // will return JsonToken.START_OBJECT (verify?)
-			    while (jp.nextToken() != JsonToken.END_OBJECT) {
-			      String fieldname = jp.getCurrentName();
-			      jp.nextToken(); // move to value, or START_OBJECT/START_ARRAY
-			      if ("name".equalsIgnoreCase(fieldname)) { // contains an object
-			        //Name name = new Name();
-			    	  out.println(fieldname);
-			      while (jp.nextToken() != JsonToken.END_OBJECT) {
-			         String namefield = jp.getCurrentName();
-			         out.println(namefield);
-			         
-			         out.println();
-			         jp.nextToken(); // move to value
-			         if ("first".equals(namefield)) {
-			        
-			         } else if ("last".equals(namefield)) {
-			          
-			         } else {
-			           throw new IllegalStateException("Unrecognized field '"+fieldname+"'!");
-			         }
-			       }
-			      
-			     } 
-			   }
-			    jp.close(); // ensure resources get cleaned up timely and properly
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			/**
-			 * Fin du test
-			 * 
-			 */
+			
 		 
 		
 		  
 		
 	}
-	
+	/**
+	 * Cette methode parse le fichier JSon et renvoi 
+	 * @return
+	 */
+	public String[] organize(IContext context){
+		
+		String[] rep= null;
+		JsonFactory f = new JsonFactory();
+	    JsonParser jp;
+	    HashMap<String, String> list = new HashMap<>();
+	    
+		try {
+			
+			PrintWriter out = context._getResponse().getWriter();
+			jp = f.createJsonParser(new File(context._getRequest().getRealPath("/")+"WEB-INF/json/templateOrder.json"));
+		    jp.nextToken(); // will return JsonToken.START_OBJECT (verify?)+
+		    while (jp.nextToken() != JsonToken.END_OBJECT) {
+		      String fieldname = jp.getCurrentName();
+		      jp.nextToken(); // move to value, or START_OBJECT/START_ARRAY
+		      out.println(fieldname);
+		      while (jp.nextToken() != JsonToken.END_OBJECT) {
+		         String namefield = jp.getCurrentName();
+		         jp.nextToken(); // move to value
+		         if ("header".equalsIgnoreCase(namefield)) {
+		        	 	
+		        	 list.put("header", jp.getText());
+		        
+		         } else if ("footer".equalsIgnoreCase(namefield)) {
+		        	 
+		        	 list.put("footer", jp.getText());
+		         }else if("tempConnexion".equalsIgnoreCase(namefield)){
+		         	list.put("tempConnexion", jp.getText());
+		         }
+		         else if("pageInscription".equalsIgnoreCase(namefield)){
+			         	list.put("inscription", jp.getText());
+			         }
+		         else if("pageMusique".equalsIgnoreCase(namefield)){
+			         	list.put("musique", jp.getText());
+			         	
+			         }
+		         //		        	 else {
+//		           throw new IllegalStateException("Unrecognized field '"+fieldname+"'!");
+//		         }
+		       }
+		      
+		    
+		   }
+		    jp.close(); // ensure resources get cleaned up timely and properly
+		   context.setPageOrder(list);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/**
+		 * Fin du test
+		 * 
+		 */
+		return rep;
+		
+		
+	}
 	
 
 	

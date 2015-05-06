@@ -1,0 +1,186 @@
+#parse($header)
+<body>
+	
+	<div id="corps" style="opacity:0.8;filter:alpha(opacity=70)">
+		<form action="recuperation" onsubmit="return ValiderInscription()" method="post" name="inscription">
+	
+			<td><p align="center">Voici la page d'inscription veuiller vous inscrire pour continuer a utiliser le site.
+ 
+
+							veuillez remplir les champs ci-dessous.
+		
+		<div style="presentation_formulaire">
+
+			<table align='center' style="margin-left: auto; margin-right: auto;"  cellspacing="3">
+			
+					<tr>
+						<td>
+							<label for="Nom"> Nom* </label></td>
+							<td>
+								<input  type="text" id="nom" name ="nom" value="" style=" color: #cccccc;
+																			   border-Color: #000000;
+																			   backgroundAlpha: 0.98;
+																			   background-Color: #cc9900;
+																			   text-Align: center;
+																			   letter-Spacing: 4;
+																			   padding-Left: 0;
+																			   font-Family: Comic Sans MS;
+																			   font-Size: 14;
+																			   font-Weight: bold;
+																			   dropShadowEnabled: true;
+																			   shadowDistance: 5;" />
+						</td>
+		
+					</tr>	
+					<tr>	
+						
+							<td><label for="prenom">prenom*</label></td>
+							<td>
+								<input type="text" id="prenom" name ="prenom" value="" style=" color: #cccccc;
+																			   border-Color: #000000;
+																			   backgroundAlpha: 0.98;
+																			   background-Color: #cc9900;
+																			   text-Align: center;
+																			   letter-Spacing: 4;
+																			   padding-Left: 0;
+																			   font-Family: Comic Sans MS;
+																			   font-Size: 14;
+																			   font-Weight: bold;
+																			   dropShadowEnabled: true;
+																			   shadowDistance: 5;" />
+							</td>
+						
+					</tr>	
+					<tr>	
+						
+							<td><label for="cp">code postal</label></td>
+							<td>
+								<input type="text" id="cp" name ="cp" value="" style=" color: #cccccc;
+																		   border-Color: #000000;
+																		   backgroundAlpha: 0.98;
+																		   background-Color: #cc9900;
+																		   text-Align: center;
+																		   letter-Spacing: 4;
+																		   padding-Left: 0;
+																		   font-Family: Comic Sans MS;
+																		   font-Size: 14;
+																		   font-Weight: bold;
+																		   dropShadowEnabled: true;
+																		   shadowDistance: 5;" />
+							</td>
+						
+					</tr>	
+					<tr>	
+						
+							<td><label for="ville">ville</label></td>
+							<td>
+								<input type="text" id="ville" name ="ville" value="" style=" color: #cccccc;
+																			   border-Color: #000000;
+																			   backgroundAlpha: 0.98;
+																			   background-Color: #cc9900;
+																			   text-Align: center;
+																			   letter-Spacing: 4;
+																			   padding-Left: 0;
+																			   font-Family: Comic Sans MS;
+																			   font-Size: 14;
+																			   font-Weight: bold;
+																			   dropShadowEnabled: true;
+																			   shadowDistance: 5;" />
+							</td>
+						
+					</tr>	
+					<tr>	
+						
+							<td><label for="rue">rue</label></td>
+							<td>
+								<input type="text" id="rue" name ="rue" value="" style=" color: #cccccc;
+																	   border-Color: #000000;
+																	   backgroundAlpha: 0.98;
+																	   background-Color: #cc9900;
+																	   text-Align: center;
+																	   letter-Spacing: 4;
+																	   padding-Left: 0;
+																	   font-Family: Comic Sans MS;
+																	   font-Size: 14;
+																	   font-Weight: bold;
+																	   dropShadowEnabled: true;
+																	   shadowDistance: 5;" />
+							
+							
+							
+							</td>
+						
+					</tr>	
+					<tr>	
+						       
+							<td><label for="numtel">numtel</label></td>
+							<td><input type="text" id="numtel" name ="numtel" value="" style=" color: #cccccc;
+																			   border-Color: #000000;
+																			   backgroundAlpha: 0.98;
+																			   background-Color: #cc9900;
+																			   text-Align: center;
+																			   letter-Spacing: 4;
+																			   padding-Left: 0;
+																			   font-Family: Comic Sans MS;
+																			   font-Size: 14;
+																			   font-Weight: bold;
+																			   dropShadowEnabled: true;
+																			   shadowDistance: 5;" />
+							</td>
+						
+					</tr>	
+					<tr>	
+					
+								<td><label for="pseudo">pseudo*</label></td>
+							<td>
+								<input type="text" id="pseudo" name ="pseudo" value="" style=" color: #cccccc;
+																				border-Color: #000000;
+																				backgroundAlpha: 0.98;
+																				background-Color: #cc9900;
+																				text-Align: center;
+																				letter-Spacing: 4;
+																				padding-Left: 0;
+																				font-Family: Comic Sans MS;
+																				font-Size: 14;
+																				font-Weight: bold;
+																				dropShadowEnabled: true;
+																				shadowDistance: 5;" />
+							</td>
+																								
+					</tr>	
+					<tr>	
+						
+							<td><label for="Mot de passe">Mot de passe*</label></td>
+							<td>
+							<input type="password" id="mdp" name ="mdp" value="" style=" color: #cccccc;
+																			border-Color: #000000;
+																		   backgroundAlpha: 0.98;
+																		   background-Color: #cc9900;
+																		   text-Align: center;
+																		   letter-Spacing: 4;
+																		   padding-Left: 0;
+																		   font-Family: Comic Sans MS;
+																		   font-Size: 14;
+																		   font-Weight: bold;
+																		   dropShadowEnabled: true;
+																		   shadowDistance: 5;" />																		   
+						</td>																		
+					</tr>	
+					<tr>	
+						<div id="bouton">
+							
+								<td><input type="reset" value="Annuler"  /></td>
+								<td><input type="submit" value="valider" /></td>
+							
+						</div>
+					</tr>
+			</table>	
+		</div>
+		</div>
+	</form>
+			</p>
+			
+			
+		
+</body>
+	#parse($footer);

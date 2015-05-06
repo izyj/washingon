@@ -15,8 +15,10 @@ public class Renderer implements IRenderer {
 		case XML:
 			return new RendererXML().render(context);
 		case HTML:
-		default:
 			return new RendererHTML().render(context);
+		case VELOCITY:
+		default:
+			return new TemplateRenderer().render(context);
 		}
 	}
 	

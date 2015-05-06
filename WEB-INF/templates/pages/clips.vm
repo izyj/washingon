@@ -1,0 +1,11 @@
+#parse($header)
+
+<div id="corps" style="opacity:0.8;filter:alpha(opacity=40)">
+	<div id="sttab">
+		<table height="30" width="100%" cellpadding="50%" cellspacing="1"> 
+		<html>
+		$lien
+		<h1></h1>
+		</html>
+		
+#parse($footer)

@@ -3,6 +3,7 @@ package jwf.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import jwf.error.JwfErrorHandler;
 import jwf.router.Dispatcher;
 import jwf.router.RewriteRule;
 import jwf.router.Rewriter;
+import jwf.singleton.BddSingleton;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -37,12 +39,32 @@ public class FrontController extends HttpServlet implements IFrontController {
 	public void init() {
 		rewriter = new Rewriter();
 		dispatcher = new Dispatcher();
-
-		// == Velocity test
-		// Login form
+		BddSingleton.getInstance();
+		//recuperation du formulaire d'inscription
+		rewriter.addRule(new RewriteRule(URIroot + "/recuperation", "GET|POST", "jwf.action.pages.ActionTraitementFormulaire"));
+		// chargement du javascript	
+		rewriter.addRule(new RewriteRule(URIroot + "/Javascript/(.+)", "GET|POST", "jwf.action.pages.ActionJavascript"));
+		//Chargement des images
+		rewriter.addRule(new RewriteRule(URIroot + "/css/(.+)/(.+)", "GET|POST", "jwf.action.pages.ActionImage"));
+		rewriter.addRule(new RewriteRule(URIroot + "/images/(.+)", "GET|POST", "jwf.action.pages.ActionImage"));
+		//Chargement du CSS
+		rewriter.addRule(new RewriteRule(URIroot + "/css/\\w", "GET|POST", "jwf.action.pages.ActionCss"));
+			
 		rewriter.addRule(new RewriteRule(URIroot + "/velocity", "GET|POST", "jwf.velocity.ActionVelocityTest"));
-		// == Velocity test
 		
+		/////////////////////Chargement des pages ////////////////////////////////////////////
+		// Page d'accueil
+		rewriter.addRule(new RewriteRule(URIroot + "/accueil", "GET|POST", "jwf.action.page.affichage.Accueil1"));
+		
+		rewriter.addRule(new RewriteRule(URIroot + "/inscription", "GET|POST", "jwf.action.page.affichage.Inscription"));
+		
+		rewriter.addRule(new RewriteRule(URIroot + "/musique", "GET|POST", "jwf.action.page.affichage.PageMusique"));
+		
+		rewriter.addRule(new RewriteRule(URIroot + "/clips", "GET|POST", "jwf.action.page.affichage.PageClips"));
+		
+	//	rewriter.addRule(new RewriteRule(URIroot + "/clips", "GET|POST", "jwf.action.page.affichage.PageMusique"));
+		
+		/**
 		// Login form
 		rewriter.addRule(new RewriteRule(URIroot + "/user/login", "GET|POST", "jwf.action.user.ActionUserLogin"));
 		
@@ -67,7 +89,7 @@ public class FrontController extends HttpServlet implements IFrontController {
 		// Edit specific user (or self)
 		rewriter.addRule(new RewriteRule(URIroot + "/user/?([0-9]+)?", "POST", "jwf.action.user.ActionUserEdit", new String[] { "user-id" }));
 		
-		
+		*/
 	}
 
 	@Override
@@ -82,7 +104,6 @@ public class FrontController extends HttpServlet implements IFrontController {
 			
 			
 			rewriter.rewrite(c = new Context(request, response));
-		
 			if(checkClass(c)) {
 				if(checkRights(c)) {
 					dispatcher.dispatch(c);
@@ -107,8 +128,16 @@ public class FrontController extends HttpServlet implements IFrontController {
 	}
 	
 	private boolean checkRights(Context c) throws Exception {
-		String[] credentialsNeeded = (String[]) Class.forName(c.getActionClass()).getMethod("getCredentials", null).invoke(null, null);
-		return AActionCredential.hasCredential(credentialsNeeded, c.getUserCredentials());
+		
+		
+		return true;
+	}
+	private boolean checkIfConnected(Context c){
+	
+		
+		//BddSingleton.listeconnection.containsKey(c._getResponse().) 
+		return false;
+		
 	}
 	
 }

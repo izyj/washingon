@@ -1,0 +1,11 @@
+{
+    "order": {
+        "Header": "header.vm",
+        "Content": "accueil.vm",
+        "Current": "0",
+        "Footer": "footer.vm",
+        "tempConnextion": "test",
+        "pageInscription": "inscription.vm",
+        "pageMusique" : "musique.vm"
+    }
+}

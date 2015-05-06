@@ -1,0 +1,13 @@
+ #parse($header)
+	
+	<body>	
+			<div id="centrage">
+				<ul id="Cmenu">
+					<li><marquee><a href="accueil1">Entrez dans le site</a></marquee></li>
+				</ul>		
+			</div>
+			
+				
+	</body>
+	
+#parse($footer)

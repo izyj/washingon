@@ -25,8 +25,8 @@ public class Context implements IContext {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private String actionClass;
-	private RendererTypes renderedType = RendererTypes.HTML;
-
+	private RendererTypes renderedType = RendererTypes.VELOCITY;
+	private HashMap<String, String> pageOrder = new HashMap<>();
 	private Map<String, String[]> properties;
 	private Map<String, File> files;
 	
@@ -286,5 +286,14 @@ public class Context implements IContext {
 	public RendererTypes getRendererType() {
 		return renderedType;
 	}
+	
+	public HashMap<String, String> getPageOrder() {
+		return pageOrder;
+	}
+	
+	public void setPageOrder(HashMap<String, String> pageOrder) {
+		this.pageOrder = pageOrder;
+	}
+	
 
 }

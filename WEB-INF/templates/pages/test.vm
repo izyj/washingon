@@ -1,0 +1,44 @@
+#include("header.vm")
+
+
+
+<!DOCTYPE html PUBLIC "-//w3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitionnel.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+		<link rel="stylesheet" type="text/css" href="CSS2.css" />
+		<title>Affilinex</title>
+    </head>
+	
+					<div class="posid">
+						<table>
+							
+							<form action='' method='POST'>
+								<a align="center">
+									<tr>
+										<td>
+											<label for="pseudo">Pseudo</label>
+											<input type="texte" name="pseudo" />							
+										</td>
+									
+										<td>
+											<label for="Motdepasse">Mot de passe</label>
+											<input type="pasword" name="motdepasse" />
+										</td>
+									
+										<td>
+											<input type="submit" value="Connexion" name="valider"/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<a href="">Mot de passe oubli</a></br></br>
+										</td>
+									</tr>
+						</table>
+					</div>
+
+	<div id="corps">
+#include("footer.vm")

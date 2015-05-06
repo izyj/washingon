@@ -1,5 +1,13 @@
 package jwf.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import jwf.DAO.ToGet;
+import jwf.modele.Administrateur;
+import jwf.modele.Client;
+import jwf.singleton.BddSingleton;
+
 import org.esgi.web.framework.action.interfaces.IAction;
 import org.esgi.web.framework.context.interfaces.IContext;
 
@@ -19,32 +27,49 @@ public abstract class AActionCredential implements IAction {
 		return new String[0];
 	}
 
-	public static boolean hasCredential(String[] credentials, String[] roles) {
+	/**
+	 * Indique si le  pseudo et mdp appartiennent a 
+	 * @param pseudo
+	 * @param mpd
+	 * @return
+	 */
+	public static boolean hasCredential(String pseudo , String mpd) {
 		
-		// No credentials for the user
-		if(roles == null) {
-			if(credentials == null || credentials.length <= 0)
-				return true;
-			else
-				return false;
-		}
-		
-		boolean found = false;
-		
-		// Need to check the credentials
-		for(String credential : credentials)  {
-			for(String role : roles) {
-				if(role.equals(credential)) {
-					found = true;
-					break;
+		int i = 0 ,g;
+		boolean trouver = false;
+		//ToGet info = new ToGet();
+		ArrayList<Client> listCl = null ;
+		ArrayList<Administrateur> lstAdm = null;
+		Iterator ite = null;
+		while(i<2){
+			if(i==0){
+				listCl = BddSingleton.ListeBDDClient;
+				ite= listCl.listIterator();
+				while(ite.hasNext() && trouver == false){
+					
+					Client cl =(Client) ite.next();
+					if(cl.getPseudo() == pseudo && cl.getMdp() == mpd){
+						
+						trouver = true;
+						
+					}
+				}		
+			}
+			if(i==1){
+				lstAdm = BddSingleton.ListeBDDAdministrateur;
+				ite= listCl.listIterator();
+				while(ite.hasNext() && trouver == false){
+				
+					Administrateur adm =(Administrateur) ite.next();
+					if(adm.getPseudo() == pseudo && adm.getMotDePasse() == mpd){
+						
+						trouver = true;
+				
+					}		
 				}
 			}
-			if(!found)
-				return false;
-			found = false;
 		}
-		
-		return true;
+		return trouver;
 	}
 
 	@Override

@@ -1,0 +1,11 @@
+#parse($header)
+<div id="corps" style="opacity:0.8;filter:alpha(opacity=40)">
+	<div id="sttab">
+		<table height="30" width="100%" cellpadding="50%" cellspacing="1"> 
+		<html>
+		<iframe title="YouTube video player" width="240" height="220" src="http://www.youtube.com/embed/4tuSqN4pNF4" frameborder="0" allowfullscreen></iframe>
+		<param name="FlashVars" value="soundFile=http://new.hulkshare.com/stream/yglboyen3iol.mp3&titles=Ja Rule - Real Life Fantasy (Prod. By 7 Aurelius) ( 2o11 ) [ www.MzHipHop.com ].mp3&skin=sheep&dllink=http://www.hulkshare.com/yglboyen3iol/"><param name="quality" value="high"><param name="menu" value="false"><param name="wmode" value="transparent"></object>
+		<h1></h1>
+		</html>
+		
+#parse($footer)		

@@ -1,0 +1,14 @@
+#parse($header)
+<div id="corps" style="opacity:0.8;filter:alpha(opacity=40)">
+	<div id="sttab">
+		<table height="30" width="100%" cellpadding="50%" cellspacing="1"> 
+		<html>
+		
+		<h1>liste d'ecoute :</h1>
+        <br>
+		<br>
+       <div class="deezer-widget-player" data-src="http://www.deezer.com/plugins/player?format=classic&autoplay=false&playlist=true&width=700&height=290&color=1990DB&layout=dark&size=medium&type=playlist&id=26239487&title=&app_id=1" data-scrolling="no" data-frameborder="0" data-allowTransparency="true" data-width="700" data-height="290"></div>
+		</table>
+	</div>
+</div>	
+#parse($footer)

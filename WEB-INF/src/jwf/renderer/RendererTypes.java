@@ -1,5 +1,5 @@
 package jwf.renderer;
 
 public enum RendererTypes {
-	JSON, XML, HTML
+	JSON, XML, HTML,VELOCITY
 }

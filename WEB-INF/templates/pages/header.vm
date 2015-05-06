@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//w3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+
+		<script type="text/Javascript" SRC="Javascript/inscription.js"> </script>
+		<link rel="stylesheet" type="text/css" href="http://localhost:8080/JWFISI/css/style.css"/>
+		<title>Ovedia Vente de Musique pour vous!</title>
+	</head>
+	
+	<body>
+	
+	#set ( $connecter = "false" )
+    #if($connecter == "True")
+	<ul id="Cmenu">
+		<li><a href="deconnexion.php"><span>deconnexion</span></a></li>
+		<li><p><marquee> vous etes connecté </marquee></p></li>
+	
+		#if ($identifiant)
+		
+			echo "Bonjour "$identifiant
+			
+		#end
+		
+	</ul>
+	#end
+	#if( $connecteradm == "True")
+		
+		<a href="Administration.php">Partie administration</a>
+	#end
+		<div class="inspos">
+
+		</div>
+		<div class="inspos">
+                      
+
+	#if($connecter == "false")
+	
+         	<form action='connexion8.php'   method='POST'>
+		
+				<label for="pseudo">pseudo</label>
+				<input type="password" name="pseudo" />
+				<label for="Motdepasse">Mot de passe</label>
+				<input type="password" name="Motdepasse" />
+				<input type="submit" name="valider" value="valider"/>
+			</form>	
+	
+	
+	
+		</div>
+	#end	
+			<ul id="Cmenu">
+				#if(!$connecter == "false")
+						<li><a href=inscription>INSCRIPTION</a></li>
+				#end
+				
+				<li><a href="accueil">ACCUEIL</a></li>
+				<li><a href="clips"><span>CLIPS</span></a></li>
+			
+
+				<li><a href=albums>Albums disponible</a></li>
+	
+			</ul>
+				<ul>
+										
+				</ul>
+	</body>
+	
