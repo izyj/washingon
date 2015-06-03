@@ -1,6 +1,5 @@
 #parse($header)
-<body>
-	
+
 	<div id="corps" style="opacity:0.8;filter:alpha(opacity=70)">
 		<form action="recuperation" onsubmit="return ValiderInscription()" method="post" name="inscription">
 	
@@ -180,7 +179,4 @@
 	</form>
 			</p>
 			
-			
-		
-</body>
-	#parse($footer);
+#include($footer)	

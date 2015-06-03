@@ -4,18 +4,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-
-		<script type="text/Javascript" SRC="Javascript/inscription.js"> </script>
+		<script type="text/Javascript" SRC="Javascript/inscription.js" />
+		<script type="text/Javascript" SRC="Javascript/onsubmit_event.js"></script>
 		<link rel="stylesheet" type="text/css" href="http://localhost:8080/JWFISI/css/style.css"/>
 		<title>Ovedia Vente de Musique pour vous!</title>
 	</head>
 	
 	<body>
 	
-	#set ( $connecter = "false" )
-    #if($connecter == "True")
+    #if($connecter)
 	<ul id="Cmenu">
-		<li><a href="deconnexion.php"><span>deconnexion</span></a></li>
+		<li><a href="Logout"><span>deconnexion</span></a></li>
 		<li><p><marquee> vous etes connecté </marquee></p></li>
 	
 		#if ($identifiant)
@@ -26,24 +25,22 @@
 		
 	</ul>
 	#end
-	#if( $connecteradm == "True")
+	#if($connecteradm)
 		
-		<a href="Administration.php">Partie administration</a>
+		<a href="backOffice">Partie administration</a>
 	#end
-		<div class="inspos">
-
-		</div>
-		<div class="inspos">
+		
+		
                       
 
-	#if($connecter == "false")
-	
-         	<form action='connexion8.php'   method='POST'>
+	#if(!$connecter)
+	<div class="inspos">
+         	<form action="connection" onsubmit= "return validerConnexion()"   method='POST' name="conection-user">
 		
 				<label for="pseudo">pseudo</label>
-				<input type="password" name="pseudo" />
+				<input type="password" name="conPseudo" id="conPseudo" />
 				<label for="Motdepasse">Mot de passe</label>
-				<input type="password" name="Motdepasse" />
+				<input type="password" name="conMdp" id="conMdp"/>
 				<input type="submit" name="valider" value="valider"/>
 			</form>	
 	
@@ -52,7 +49,7 @@
 		</div>
 	#end	
 			<ul id="Cmenu">
-				#if(!$connecter == "false")
+				#if(!$connecter)
 						<li><a href=inscription>INSCRIPTION</a></li>
 				#end
 				
@@ -63,8 +60,6 @@
 				<li><a href=albums>Albums disponible</a></li>
 	
 			</ul>
-				<ul>
-										
-				</ul>
-	</body>
+		
+
 	

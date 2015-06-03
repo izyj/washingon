@@ -81,6 +81,7 @@ public class Client extends Personne {
 	@Override
 	public boolean equals(Object client) {
 		boolean rep = false ;
+		
 	if(	this.pseudo == ((Client)client).pseudo &&
 		this.nom == ((Client)client).nom && 
 		this.prenom == ((Client)client).prenom &&

@@ -34,7 +34,7 @@ public class ToGet extends Database {
 	public ArrayList<Client> ToGetAllClient(){
 		ArrayList<Client> cls = new ArrayList<Client>() ;
 		OpenConnection();
-		requete = "select "+BddConstantesKeys.SQL_CLIENT_ID+","+BddConstantesKeys.SQL_CLIENT_MPD+","+BddConstantesKeys.SQL_CLIENT_NOM+","
+		requete = "select "+BddConstantesKeys.SQL_CLIENT_ID+","+BddConstantesKeys.SQL_CLIENT_MPD+","+BddConstantesKeys.SQL_CLIENT_NOM
 		+","+BddConstantesKeys.SQL_CLIENT_NUMTEL+","+BddConstantesKeys.SQL_CLIENT_PRENOM+","+BddConstantesKeys.SQL_CLIENT_PSEUDO+","+BddConstantesKeys.SQL_CLIENT_RUE+","
 		+BddConstantesKeys.SQL_CLIENT_VILLE+","+BddConstantesKeys.SQL_CLIENT_CODEP+" From "+BddConstantesKeys.SQL_TABLE_CLIENT+";";
 		try {
@@ -55,8 +55,10 @@ public class ToGet extends Database {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}
 		finally{
+			System.out.println("Requete SQL : "+requete);
 			CloseConnection();
 		}
 	
@@ -64,7 +66,7 @@ public class ToGet extends Database {
 	}
 	
 	/**
-	 * recupere les données d'un client 
+	 * recupere les données dun client 
 	 * @param name
 	 * @param mpd
 	 * @return
@@ -73,9 +75,9 @@ public class ToGet extends Database {
 		Client cl =null;
 		OpenConnection();
 		requete = "select "+BddConstantesKeys.SQL_CLIENT_ID+","+BddConstantesKeys.SQL_CLIENT_MPD+","+BddConstantesKeys.SQL_CLIENT_NOM+","
-		+","+BddConstantesKeys.SQL_CLIENT_NUMTEL+","+BddConstantesKeys.SQL_CLIENT_PRENOM+","+BddConstantesKeys.SQL_CLIENT_PSEUDO+","+BddConstantesKeys.SQL_CLIENT_RUE+","
-		+BddConstantesKeys.SQL_CLIENT_VILLE+","+BddConstantesKeys.SQL_CLIENT_CODEP+" From "+BddConstantesKeys.SQL_TABLE_CLIENT+" where "+ BddConstantesKeys.SQL_CLIENT_PSEUDO +"= '"+ pseudo +
-		"' and "+BddConstantesKeys.SQL_CLIENT_MPD +"='"+ mpd+"'";
+		+BddConstantesKeys.SQL_CLIENT_NUMTEL+","+BddConstantesKeys.SQL_CLIENT_PRENOM+","+BddConstantesKeys.SQL_CLIENT_PSEUDO+","+BddConstantesKeys.SQL_CLIENT_RUE+","
+		+BddConstantesKeys.SQL_CLIENT_VILLE+",é"+BddConstantesKeys.SQL_CLIENT_CODEP+" From "+BddConstantesKeys.SQL_TABLE_CLIENT+" where "+ BddConstantesKeys.SQL_CLIENT_PSEUDO +"= "+ pseudo +
+		" and "+BddConstantesKeys.SQL_CLIENT_MPD +"="+ mpd+"";
 		try {
 			ResultSet result = st.executeQuery(requete);
 			cl = new Client();
@@ -91,6 +93,7 @@ public class ToGet extends Database {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}
 		finally{
 			CloseConnection();
@@ -99,12 +102,53 @@ public class ToGet extends Database {
 		return cl;	
 	}
 	
+	/**
+	 * recupere tout les Albums
+	 * @param name
+	 * @param mpd
+	 * @return
+	 */
+	public ArrayList<Album> ToGetAllAlbum(){
+		
+		Album album =null;
+		OpenConnection();
+		ArrayList<Album> albums = new ArrayList<Album>();
+		requete ="select "+BddConstantesKeys.SQL_ALBUM_ID+","+BddConstantesKeys.SQL_ALBUM_NB_TITRE+","+BddConstantesKeys.SQL_ALBUM_NOM+
+				","+ BddConstantesKeys.SQL_ALBUM_NUM_IMAGE+ ","+ BddConstantesKeys.SQL_ALBUM_NUMGENRE+ ","+ BddConstantesKeys.SQL_ALBUM_PRIX+
+				","+ BddConstantesKeys.SQL_ALBUM_PRIX_REDUC+","+ BddConstantesKeys.SQL_ALBUM_DATE_AJOUT+" from "+BddConstantesKeys.SQL_TABLE_ALBUM ; 
+		try {
+			ResultSet result = st.executeQuery(requete);
+			while (result.next()){
+			
+				album = new Album();
+				//album.setDateAjout(result.getDate(8));
+				album.setId(result.getInt(1));
+				album.setIdImage(result.getInt(4));
+				album.setNbTitre(result.getInt(2));
+				album.setNom(result.getString(3));
+				album.setNumGenre(result.getInt(5));
+				album.setPrix(result.getInt(6));
+				album.setPrixReduc(result.getInt(7));
+				albums.add(album);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
+		}finally{
+			CloseConnection();
+		}
+		
+		
+		return albums;
+		
+	}
+	
 	public ArrayList<Administrateur> ToGetAllAdmin(){
 		
 		ArrayList<Administrateur> admins = new ArrayList<Administrateur>();
 		OpenConnection();
 		requete = "select "+BddConstantesKeys.SQL_ADMIN_ID+","+BddConstantesKeys.SQL_ADMIN_MPD+","+BddConstantesKeys.SQL_ADMIN_PSEUDO
-				+"from "+BddConstantesKeys.SQL_TABLE_ADMIN + " ;";
+				+" from "+BddConstantesKeys.SQL_TABLE_ADMIN + " ;";
 		try {
 			ResultSet result = st.executeQuery(requete);
 			
@@ -117,6 +161,7 @@ public class ToGet extends Database {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}
 		finally{
 			CloseConnection();
@@ -131,9 +176,10 @@ public class ToGet extends Database {
 		Administrateur admin = null;
 		OpenConnection();
 		requete = "select "+BddConstantesKeys.SQL_ADMIN_ID+","+BddConstantesKeys.SQL_ADMIN_MPD+","+BddConstantesKeys.SQL_ADMIN_PSEUDO
-				+"from "+BddConstantesKeys.SQL_TABLE_ADMIN + " where "+BddConstantesKeys.SQL_ADMIN_PSEUDO +" = "+ name +" and "+ BddConstantesKeys.SQL_ADMIN_MPD+" = "+mdp;
+				+" from "+BddConstantesKeys.SQL_TABLE_ADMIN + " where "+BddConstantesKeys.SQL_ADMIN_PSEUDO +" = "+ name +" and "+ BddConstantesKeys.SQL_ADMIN_MPD+" = "+mdp;
 		try {
 			ResultSet result = st.executeQuery(requete);
+			result.next();
 			admin = new Administrateur();
 			admin.setId(result.getInt(1));
 			admin.setMotDePasse(result.getString(2));
@@ -141,6 +187,7 @@ public class ToGet extends Database {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}
 		finally{
 			CloseConnection();
@@ -166,6 +213,7 @@ public class ToGet extends Database {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}finally{
 			CloseConnection();
 		}
@@ -183,7 +231,7 @@ public class ToGet extends Database {
 				","+ BddConstantesKeys.SQL_ARTISTE_NUMGENRE +" from "+BddConstantesKeys.SQL_TABLE_ARTISTE +" where "+BddConstantesKeys.SQL_ARTISTE_NOM+ " = "+name ; 
 		try {
 			ResultSet result = st.executeQuery(requete);
-			
+				result.next();
 				artiste = new Artiste();
 				artiste.setIdalbum(result.getInt(2));
 				artiste.setIdArtiste(result.getInt(1));
@@ -193,6 +241,7 @@ public class ToGet extends Database {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}finally{
 			CloseConnection();
 		}
@@ -201,7 +250,7 @@ public class ToGet extends Database {
 		
 		return artiste;
 	}
-	public Artiste ToGetAlbum(String name){
+	public Album ToGetAlbum(String name){
 		
 		Album album =null;
 		OpenConnection();
@@ -223,12 +272,13 @@ public class ToGet extends Database {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Requete SQL : "+requete);
 		}finally{
 			CloseConnection();
 		}
 		
 		
-		return null;
+		return album;
 		
 	}
 	

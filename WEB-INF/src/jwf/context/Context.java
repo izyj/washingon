@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import jwf.error.JwfErrorHandler;
 import jwf.renderer.RendererTypes;
@@ -29,31 +30,36 @@ public class Context implements IContext {
 	private HashMap<String, String> pageOrder = new HashMap<>();
 	private Map<String, String[]> properties;
 	private Map<String, File> files;
-	
+	private String statut;
+
 	private static File tmpFolder = new File("../tmp");
 	public static File root = new File("../res");
-	
+
 	/**
 	 * Constructor.
 	 * 
-	 * @param request Request.
-	 * @param response Response.
+	 * @param request
+	 *            Request.
+	 * @param response
+	 *            Response.
 	 * @throws IOException
 	 */
-	public Context(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Context(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		this.request = request;
 		this.response = response;
-		
+
 		init();
 	}
-	
+
 	private void init() {
 
 		// If the file doesn't exist
 		if (!tmpFolder.exists()) {
 			try {
 				tmpFolder.mkdir();
-			} catch (SecurityException se) {}
+			} catch (SecurityException se) {
+			}
 
 		}
 
@@ -61,114 +67,128 @@ public class Context implements IContext {
 		if (!root.exists()) {
 			try {
 				root.mkdir();
-			} catch (SecurityException se) {}
+			} catch (SecurityException se) {
+			}
 		}
-		
+
 		try {
 
 			// Normal
-			properties = new HashMap<String, String[]>(request.getParameterMap());
+			properties = new HashMap<String, String[]>(
+					request.getParameterMap());
 			files = new HashMap<String, File>();
-			
+
 			// Multi-part
-			if(ServletFileUpload.isMultipartContent(request)) {
-			    ServletFileUpload uploader = new ServletFileUpload(new DiskFileItemFactory());
-			    List<FileItem> items = uploader.parseRequest(request);
-			      
-			    for(FileItem item : items) {
-			    	if(item.isFormField()) {
-			    		// Form item
-			    		properties.put(item.getFieldName(), appendToArray(properties.get(item.getFieldName()), item.getString()));
-			    	} else {
-			    		if(item.getName() != null && !item.getName().isEmpty()) {
-				    		// File
-				    		File f = new File(tmpFolder.getAbsolutePath() + "/" + item.getName());
-							
-				    		if(f.exists() || f.createNewFile()) {
-					    		item.write(f);
-					    		files.put(item.getName(), f);
-				    		}
-			    		}
-			    	}
-			    }
+			if (ServletFileUpload.isMultipartContent(request)) {
+				ServletFileUpload uploader = new ServletFileUpload(
+						new DiskFileItemFactory());
+				List<FileItem> items = uploader.parseRequest(request);
+
+				for (FileItem item : items) {
+					if (item.isFormField()) {
+						// Form item
+						properties.put(
+								item.getFieldName(),
+								appendToArray(
+										properties.get(item.getFieldName()),
+										item.getString()));
+					} else {
+						if (item.getName() != null && !item.getName().isEmpty()) {
+							// File
+							File f = new File(tmpFolder.getAbsolutePath() + "/"
+									+ item.getName());
+
+							if (f.exists() || f.createNewFile()) {
+								item.write(f);
+								files.put(item.getName(), f);
+							}
+						}
+					}
+				}
 			}
-			
+
 			// Rendered type
 			initRendererType();
-			
+
 		} catch (FileUploadException e) {
 			e.printStackTrace();
-			JwfErrorHandler.displayError(this, 500, "Error while uploading file : " + e.getMessage());
+			JwfErrorHandler.displayError(this, 500,
+					"Error while uploading file : " + e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			JwfErrorHandler.displayError(this, 500, "Error while retreiving sended values : " + e.getMessage());
+			JwfErrorHandler.displayError(this, 500,
+					"Error while retreiving sended values : " + e.getMessage());
 		}
 	}
-	
+
 	private void initRendererType() {
-		if(properties.containsKey("type")) {
+		if (properties.containsKey("type")) {
 			String type = getParameterUnique("type");
-			
-			if(type != null) {
-				switch(type) {
-				case "JSON" :
-				case "json" :
+
+			if (type != null) {
+				switch (type) {
+				case "JSON":
+				case "json":
 					this.renderedType = RendererTypes.JSON;
 					break;
-				case "XML" :
-				case "xml" :
+				case "XML":
+				case "xml":
 					this.renderedType = RendererTypes.XML;
 					break;
-				case "HTML" :
-				case "html" :
+				case "HTML":
+				case "html":
 					this.renderedType = RendererTypes.HTML;
 					break;
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Print debug informations.
 	 * 
 	 * @throws IOException
 	 */
 	public void printDebugInfos() throws IOException {
-		
+
 		response.getWriter().println("Context debug:");
-		
-		for(Entry<String, String[]> entry : properties.entrySet()) {
-			for(int i= 0; i < entry.getValue().length; i++)
-				response.getWriter().println(entry.getKey() + "[" + i + "]=" + entry.getValue()[i]);
+
+		for (Entry<String, String[]> entry : properties.entrySet()) {
+			for (int i = 0; i < entry.getValue().length; i++)
+				response.getWriter().println(
+						entry.getKey() + "[" + i + "]=" + entry.getValue()[i]);
 		}
-		
-		for(File f : files.values()) {
-			response.getWriter().println("file " + f.getName() + " uploaded (" + f.length() + ")");
+
+		for (File f : files.values()) {
+			response.getWriter().println(
+					"file " + f.getName() + " uploaded (" + f.length() + ")");
 		}
 	}
-	
+
 	/**
 	 * Relocate an array.
 	 * 
-	 * @param tab Tab to reallocate
-	 * @param toAdd String to add.
+	 * @param tab
+	 *            Tab to reallocate
+	 * @param toAdd
+	 *            String to add.
 	 * @return The reallocated string.
 	 */
 	private String[] appendToArray(String[] tab, String toAdd) {
-		
-		if(tab == null)
+
+		if (tab == null)
 			return new String[] { toAdd };
-		
+
 		String[] newtab = new String[tab.length + 1];
 		int i = 0;
-		
-		for(; i < tab.length; i++)
+
+		for (; i < tab.length; i++)
 			newtab[i] = tab[i];
 		newtab[i] = toAdd;
-		
+
 		return newtab;
 	}
-	
+
 	@Override
 	public void setActionClass(String actionClass) {
 		this.actionClass = actionClass;
@@ -193,16 +213,16 @@ public class Context implements IContext {
 	public Object getParameter(String key) {
 		return properties.get(key);
 	}
-	
+
 	public String getParameterUnique(String key) {
 		String[] tmp = properties.get(key);
-		
-		if(tmp != null && tmp.length > 0)
+
+		if (tmp != null && tmp.length > 0)
 			return tmp[0];
-		
+
 		return null;
 	}
-	
+
 	public void setParamater(String key, String[] value) {
 		properties.put(key, value);
 	}
@@ -211,11 +231,11 @@ public class Context implements IContext {
 	public String[] getParameterKeys() {
 		String[] tmp = new String[properties.keySet().size()];
 		int i = 0;
-		
-		for(String key : properties.keySet()) {
+
+		for (String key : properties.keySet()) {
 			tmp[i++] = key;
 		}
-		
+
 		return tmp;
 	}
 
@@ -228,7 +248,7 @@ public class Context implements IContext {
 	public Object getAttribute(String key) {
 		return request.getAttribute(key);
 	}
-	
+
 	@Override
 	public boolean resetSession() {
 		request.getSession().invalidate();
@@ -245,39 +265,41 @@ public class Context implements IContext {
 	public File[] getUploadedFiles() {
 		File[] tmp = new File[files.size()];
 		int i = 0;
-		
-		for(File f : files.values()) {
+
+		for (File f : files.values()) {
 			tmp[i++] = f;
 		}
 		return tmp;
 	}
-	
+
 	/**
 	 * Remove all temporary files.
 	 */
 	public void removeUploadedFiles() {
-		for(File f : files.values()) {
+		for (File f : files.values()) {
 			f.delete();
 		}
-		
+
 		files = new HashMap<String, File>();
 	}
 
 	@Override
 	public void setSessionAttribute(String key, Object value) {
-		request.getSession().setAttribute(key, value);
+		HttpSession session = request.getSession(true);
+		session.setAttribute(key, value);
 	}
 
 	@Override
 	public Object getSessionAttribute(String key) {
-		return request.getSession().getAttribute(key);
+		HttpSession session = request.getSession(true);
+		return session.getAttribute(key);
 	}
 
 	@Override
 	public String[] getUserCredentials() {
 		return (String[]) getSessionAttribute("user-cr");
 	}
-	
+
 	/**
 	 * Get the renderer type.
 	 * 
@@ -286,14 +308,21 @@ public class Context implements IContext {
 	public RendererTypes getRendererType() {
 		return renderedType;
 	}
-	
+
 	public HashMap<String, String> getPageOrder() {
 		return pageOrder;
 	}
-	
+
 	public void setPageOrder(HashMap<String, String> pageOrder) {
 		this.pageOrder = pageOrder;
 	}
-	
+
+	public String getStatut() {
+		return statut;
+	}
+
+	public void setStatut(String statut) {
+		this.statut = statut;
+	}
 
 }

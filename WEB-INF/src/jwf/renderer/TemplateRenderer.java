@@ -66,7 +66,7 @@ public class TemplateRenderer implements IRenderer {
 		    while (jp.nextToken() != JsonToken.END_OBJECT) {
 		      String fieldname = jp.getCurrentName();
 		      jp.nextToken(); // move to value, or START_OBJECT/START_ARRAY
-		      out.println(fieldname);
+		    
 		      while (jp.nextToken() != JsonToken.END_OBJECT) {
 		         String namefield = jp.getCurrentName();
 		         jp.nextToken(); // move to value

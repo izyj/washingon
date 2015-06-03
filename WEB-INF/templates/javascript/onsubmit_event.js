@@ -1,4 +1,4 @@
-
+/*
 // Below Function Executes On Form Submit
 function ValidationEvent() {
 // Storing Field Values In Variables
@@ -31,3 +31,4 @@ alert("All fields are required.....!");
 return false;
 }
 }
+*/

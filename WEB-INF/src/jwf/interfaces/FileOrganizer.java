@@ -6,17 +6,17 @@ import java.util.Vector;
 public class FileOrganizer<E> implements IFileOrganizer {
 
 	private Vector<E> element;
-	
+
 	public FileOrganizer() {
-		
-		
-		//element.
+
+		// element.
 	}
+
 	@Override
 	public void push(Object file) {
 
-	//	element.add(file);
-	
+		// element.add(file);
+
 	}
 
 	@Override
@@ -28,11 +28,7 @@ public class FileOrganizer<E> implements IFileOrganizer {
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
-	
-	
 
 }

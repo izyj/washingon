@@ -1,12 +1,15 @@
 package jwf.modele;
 
-public abstract class Personne {
+public class Personne {
 	
 	protected int id;
 	
 	protected String nom;
 	
 	protected String prenom;
+	
+	protected String Status;
+	
 	
 	public Personne() {
 		// TODO Auto-generated constructor stub
@@ -36,6 +39,11 @@ public abstract class Personne {
 		this.prenom = prenom;
 	}
 	
-	
+	public String getStatus() {
+		return Status;
+	}
+	public void setStatus(String status) {
+		Status = status;
+	}
 
 }

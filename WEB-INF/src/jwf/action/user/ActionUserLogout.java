@@ -13,16 +13,15 @@ public class ActionUserLogout extends AActionCredential {
 
 	@Override
 	public void proceed(IContext context) {
-		
-		context.resetSession();
-				
+
+		context._getRequest().getSession(false).invalidate();
 		try {
-			context.setAttribute("model", new JwfMessage("You are now disconnected"));
-			context._getResponse().setContentType("text/html");
-			context._getResponse().getWriter().write(new Renderer().render(context));
-		} catch (IOException e) {
-			JwfErrorHandler.displayError(context, 500, "error while writting response : " + e.getMessage());
-			e.printStackTrace();
+			context._getResponse().sendRedirect(
+					"http://localhost:8080/JWFISI/accueil");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+
 	}
 }

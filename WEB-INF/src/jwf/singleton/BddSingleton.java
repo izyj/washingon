@@ -7,7 +7,9 @@ import java.util.Map;
 
 import jwf.DAO.ToGet;
 import jwf.modele.Administrateur;
+import jwf.modele.Album;
 import jwf.modele.Client;
+import jwf.modele.News;
 
 
 public final class BddSingleton {
@@ -16,12 +18,12 @@ public final class BddSingleton {
 	 
 	     public static ArrayList<Client> ListeBDDClient;
 	     public static ArrayList<Administrateur> ListeBDDAdministrateur;
+	     public static ArrayList<News> listeBDDNews;
+	     public static ArrayList<Album> listeBDDAlbums;
 	     public ToGet  recuperation = null;
-	     public static Map<String,String> listeconnection = new  Hashtable<String,String>();
+	     //public static Map<String,String> listeconnection = new  Hashtable<String,String>();
 	     
-	     // D'autres attributs, classiques et non "static".
-	     //private String xxx;
-	     //private int zzz;
+
 	 
 	     /**
 	      * Constructeur de l'objet.
@@ -31,10 +33,6 @@ public final class BddSingleton {
 	         super();
 	     }
 	 
-	     /**
-	      * Méthode permettant de renvoyer une instance de la classe Singleton
-	      * @return Retourne l'instance du singleton.
-	      */
 	     public final static BddSingleton getInstance() {
 	       
 	         if (BddSingleton.instance == null) {
@@ -64,6 +62,19 @@ public final class BddSingleton {
 	    	 ListeBDDAdministrateur = recuperation.ToGetAllAdmin();
 	     }
 	     
+	     public final void ChargementAlbums(){
+	    	 if(recuperation == null)
+	    	 recuperation = new ToGet();
+	    	 
+	    	 listeBDDAlbums = recuperation.ToGetAllAlbum();
+   
 	 }
+	     
+	   public final void ChargementSingleton(){
+		   ChargementAlbums();
+		   ChargementAdmins();
+		   ChargementClients();
+	   }
+}
 
 

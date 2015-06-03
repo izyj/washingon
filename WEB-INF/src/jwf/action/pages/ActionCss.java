@@ -13,10 +13,9 @@ import jwf.action.AActionCredential;
 import org.esgi.web.framework.action.interfaces.IAction;
 import org.esgi.web.framework.context.interfaces.IContext;
 
-public class ActionCss extends AActionCredential  implements IAction  {
-	
-	
-	 public ActionCss() {
+public class ActionCss extends AActionCredential implements IAction {
+
+	public ActionCss() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,7 +34,7 @@ public class ActionCss extends AActionCredential  implements IAction  {
 	@Override
 	public void addCredential(String role) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -52,65 +51,70 @@ public class ActionCss extends AActionCredential  implements IAction  {
 
 	@Override
 	public void proceed(IContext context) {
-		
-			int position  = context._getRequest().getRequestURL().lastIndexOf("/");
-			File css = new File(context._getRequest().getRealPath("/WEB-INF/templates/css/"+context._getRequest().getRequestURL().substring(position+1)));
-			System.out.println(context._getRequest().getRealPath("/WEB-INF/templates/css/"+context._getRequest().getRequestURL().substring(position+1)));
-			context._getResponse().setContentType("text/css");
-			
 
-			 ServletOutputStream out;
+		int position = context._getRequest().getRequestURL().lastIndexOf("/");
+		File css = new File(context._getRequest().getRealPath(
+				"/WEB-INF/templates/css/"
+						+ context._getRequest().getRequestURL()
+								.substring(position + 1)));
+		context._getResponse().setContentType("text/css");
+
+		ServletOutputStream out;
+		FileInputStream in = null;
+		try {
+
+			out = context._getResponse().getOutputStream();
+			if (css == null)
+
+				context._getResponse().sendError(
+						HttpServletResponse.SC_NOT_FOUND);
+
 			try {
-				out = context._getResponse().getOutputStream();
-			
-	
-			 
-			 if (css == null) 
-			
-			context._getResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
-			
-			
-			   try {
-			   
-			     byte[] tampon = new byte[5 * 1024];
-			     FileInputStream in = new FileInputStream(css);
-			     while (in.read(tampon) >= 0) {
-			       out.write(tampon);
-			     }
-			   } catch (IOException e) {
-			     // si une erreur se produit au milieu de la réponse
-			     // on envoie le code d'erreur HTTP adéquat
-				  // context._getResponse().sendError(HttpServletResponse.SC_PARTIAL_CONTENT);
-			   } finally {
-			     if (css != null) 
-			       out.close();
-			   }
-			  } 
-	catch (IOException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+
+				byte[] tampon = new byte[6 * 1024];
+				in = new FileInputStream(css);
+				while (in.read(tampon) >= 0) {
+					out.write(tampon);
+				}
+
+			} catch (IOException e) {
+				// si une erreur se produit au milieu de la réponse
+				// on envoie le code d'erreur HTTP adéquat
+				// context._getResponse().sendError(HttpServletResponse.SC_PARTIAL_CONTENT);
+			} finally {
+				if (css != null)
+					in.close();
+				out.flush();
+				out.close();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 	}
-		
-	}
-	
+
 	/**
 	 * récupere le type MIME
+	 * 
 	 * @param file
 	 * @return
 	 */
-	public static String getMIMEType(File file){
-		   if(file.isDirectory()){return "repertoire";}
-		   if(!file.exists()){return "fichier inexistant";}
-		   try{
-		      URL url = file.toURL();
-		      URLConnection connection = url.openConnection();
-		      return connection.getContentType();
-		   }catch(MalformedURLException mue){
-		      return mue.getMessage();
-		   }catch(IOException ioe){
-		      return ioe.getMessage();
-		      }
+	public static String getMIMEType(File file) {
+		if (file.isDirectory()) {
+			return "repertoire";
+		}
+		if (!file.exists()) {
+			return "fichier inexistant";
+		}
+		try {
+			URL url = file.toURL();
+			URLConnection connection = url.openConnection();
+			return connection.getContentType();
+		} catch (MalformedURLException mue) {
+			return mue.getMessage();
+		} catch (IOException ioe) {
+			return ioe.getMessage();
 		}
 	}
-
-
+}

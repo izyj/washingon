@@ -4,14 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
 
 import jwf.action.AActionCredential;
+import jwf.constantes.ConstantsKeys;
 import jwf.context.Context;
 import jwf.error.JwfErrorHandler;
+import jwf.modele.Administrateur;
+import jwf.modele.Client;
+import jwf.modele.Personne;
 import jwf.router.Dispatcher;
 import jwf.router.RewriteRule;
 import jwf.router.Rewriter;
@@ -39,9 +45,31 @@ public class FrontController extends HttpServlet implements IFrontController {
 	public void init() {
 		rewriter = new Rewriter();
 		dispatcher = new Dispatcher();
-		BddSingleton.getInstance();
+		
+		BddSingleton.getInstance().ChargementSingleton();
+
+		//partie  administrateur
+		rewriter.addRule(new RewriteRule(URIroot + "/backOffice", "GET|POST", "jwf.action.pages.admin.BackOffice"));
+		// gestion client
+		rewriter.addRule(new RewriteRule(URIroot + "/gestionClient", "GET|POST", "jwf.action.pages.admin.client.GestionClient"));
+		rewriter.addRule(new RewriteRule(URIroot + "/suppresionClient", "GET|POST", "jwf.action.pages.admin.client.SuppressionClient"));
+		rewriter.addRule(new RewriteRule(URIroot + "/suppressionClientAction", "GET|POST", "jwf.action.admin.ActionSuppressionClient"));
+		//gestion album
+		rewriter.addRule(new RewriteRule(URIroot + "/gestionAlbum", "GET|POST", "jwf.action.pages.admin.album.GestionAlbum"));
+		rewriter.addRule(new RewriteRule(URIroot + "/SuppressionAlbum", "GET|POST", "jwf.action.pages.admin.album.SuppressionAlbum"));
+		rewriter.addRule(new RewriteRule(URIroot + "/suppressionAlbumAction", "GET|POST", "jwf.action.admin.ActionSuppressionAlbum"));
+		rewriter.addRule(new RewriteRule(URIroot + "/AjoutAlbumAction", "GET|POST", "jwf.action.admin.ActionAjoutAlbum"));
+		
+		//gestion des news
+		rewriter.addRule(new RewriteRule(URIroot + "/ajoutNews", "GET|POST", "jwf.action.pages.admin.AjoutNews"));	
+		rewriter.addRule(new RewriteRule(URIroot + "/gestionNews", "GET|POST", "jwf.action.pages.admin.AjoutNews"));
+		
+		//deconnexion
+		rewriter.addRule(new RewriteRule(URIroot + "/Logout", "GET|POST", "jwf.action.user.ActionUserLogout"));
+		//recuperation du formulaire de connexion
+		rewriter.addRule(new RewriteRule(URIroot + "/connection", "GET|POST", "jwf.action.user.ActionUserLogin"));
 		//recuperation du formulaire d'inscription
-		rewriter.addRule(new RewriteRule(URIroot + "/recuperation", "GET|POST", "jwf.action.pages.ActionTraitementFormulaire"));
+		rewriter.addRule(new RewriteRule(URIroot + "/recuperation", "GET|POST", "jwf.action.user.ActionInscription"));
 		// chargement du javascript	
 		rewriter.addRule(new RewriteRule(URIroot + "/Javascript/(.+)", "GET|POST", "jwf.action.pages.ActionJavascript"));
 		//Chargement des images
@@ -61,35 +89,8 @@ public class FrontController extends HttpServlet implements IFrontController {
 		rewriter.addRule(new RewriteRule(URIroot + "/musique", "GET|POST", "jwf.action.page.affichage.PageMusique"));
 		
 		rewriter.addRule(new RewriteRule(URIroot + "/clips", "GET|POST", "jwf.action.page.affichage.PageClips"));
-		
-	//	rewriter.addRule(new RewriteRule(URIroot + "/clips", "GET|POST", "jwf.action.page.affichage.PageMusique"));
-		
-		/**
-		// Login form
-		rewriter.addRule(new RewriteRule(URIroot + "/user/login", "GET|POST", "jwf.action.user.ActionUserLogin"));
-		
-		// Logout page
-		rewriter.addRule(new RewriteRule(URIroot + "/user/logout", "GET|POST", "jwf.action.user.ActionUserLogout"));
+			
 
-		// Add an user
-		rewriter.addRule(new RewriteRule(URIroot + "/user/add", "POST", "jwf.action.user.ActionUserAdd"));
-
-		// Search an user
-		rewriter.addRule(new RewriteRule(URIroot + "/user/search/(.+)", "POST", "jwf.action.user.ActionUserSearch", new String[] { "user-login" }));
-		 
-		// Delete an user
-		rewriter.addRule(new RewriteRule(URIroot + "/user/delete/([0-9]+)", "POST", "jwf.action.user.ActionUserDelete", new String[] { "user-id" }));
-		
-		// List all 
-		rewriter.addRule(new RewriteRule(URIroot + "/user/list", "GET", "jwf.action.user.ActionUserDisplayAll"));
-
-		// List specific user (or self)
-		rewriter.addRule(new RewriteRule(URIroot + "/user/?([0-9]+)?", "GET", "jwf.action.user.ActionUserDisplay", new String[] { "user-id" }));
-		
-		// Edit specific user (or self)
-		rewriter.addRule(new RewriteRule(URIroot + "/user/?([0-9]+)?", "POST", "jwf.action.user.ActionUserEdit", new String[] { "user-id" }));
-		
-		*/
 	}
 
 	@Override
@@ -105,39 +106,72 @@ public class FrontController extends HttpServlet implements IFrontController {
 			
 			rewriter.rewrite(c = new Context(request, response));
 			if(checkClass(c)) {
-				if(checkRights(c)) {
+				dispatcher.dispatch(c);
+				/*if(checkClientRights(c)) {
 					dispatcher.dispatch(c);
-				} else {
+				}else if(checkAdminRights(c)) {
+					dispatcher.dispatch(c);
+					
+				}
+				else if(c._getRequest().getSession().isNew()){
+					dispatcher.dispatch(c);
+				}
+				else {
+				
 					// 403
 					JwfErrorHandler.displayError(c, 403, "you doesn't have the rights to view this page");
-				}
-			} else {
+				}*/
+			}
+			 else {
 				// 404
 				JwfErrorHandler.displayError(c, 404, "the page doesn't exist");
 			}
 			
-			c.removeUploadedFiles();
+			//c.removeUploadedFiles();
 		} catch (Exception e) {
 			e.printStackTrace(); // 500
 			JwfErrorHandler.displayError(c, 500, "error while loading page : " + e);
+			}
 		}
-	}
+	
 	
 	private boolean checkClass(Context c) {
 		return c.getActionClass() != null && c.getActionClass().length() > 0;
 	}
 	
-	private boolean checkRights(Context c) throws Exception {
+	private boolean checkClientRights(Context c) throws Exception {
 		
-		
-		return true;
+
+		boolean rep = false;
+
+
+			 String var = ""; 
+			 Enumeration e = c._getRequest().getSession().getAttributeNames();
+			 while(e.hasMoreElements()){
+				 var = (String)e.nextElement();
+			 	 if(c.getActionClass().equals(var))
+			 		rep = true;
+			 
+		}
+		return rep;
 	}
-	private boolean checkIfConnected(Context c){
 	
+	private boolean checkAdminRights(Context c) throws Exception {
 		
-		//BddSingleton.listeconnection.containsKey(c._getResponse().) 
-		return false;
+
+		boolean rep = false;
+
+				 String var = ""; 
+				 Enumeration e = c._getRequest().getSession().getAttributeNames();
+				 while(e.hasMoreElements()){
+					 var = (String)e.nextElement();
+				 	 if(c.getActionClass().equals(var))
+				 		rep = true;
+			}
 		
+		
+		return rep;
 	}
+
 	
 }

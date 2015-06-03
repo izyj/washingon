@@ -1,7 +1,6 @@
 #parse($header)
-<body>
-#set( $foo = "Velocity" )
-Hello $foo World!
-</body>
 
-parse($footer)	
+
+
+
+#include($footer)	
